@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Check for backend project
+        id: backend_project
+        shell: bash
+        run: |
+          if compgen -G "*.csproj" > /dev/null || compgen -G "*/*.csproj" > /dev/null; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "Backend project not present yet; skipping backend checks."
+          fi
+
+      - name: Restore
+        if: steps.backend_project.outputs.found == 'true'
+        run: dotnet restore
+
+      - name: Build
+        if: steps.backend_project.outputs.found == 'true'
+        run: dotnet build --no-restore
+
+      - name: Test
+        if: steps.backend_project.outputs.found == 'true'
+        run: dotnet test --no-build
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check for frontend manifest
+        id: frontend_manifest
+        shell: bash
+        run: |
+          if [ -f package.json ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "Frontend project not present yet; skipping frontend checks."
+          fi
+
+      - name: Install dependencies
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: npm install
+
+      - name: Unit tests
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: npm test
+
+      - name: E2E tests
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: npx playwright test

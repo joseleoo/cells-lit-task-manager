@@ -1,0 +1,40 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Node
+node_modules/
+dist/
+coverage/
+.npm/
+.eslintcache
+
+# Testing
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
