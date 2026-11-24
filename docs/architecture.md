@@ -23,18 +23,18 @@ Planned testing layers:
 
 ## Backend boundary
 
-The backend exposes a versionless REST surface under `/api/tasks`. Controllers handle HTTP concerns, while a service abstraction owns read, title-update, completion, and delete rules. The service returns snapshots from an in-memory collection so callers cannot mutate stored state directly.
+The backend exposes a versionless REST surface under `/api/tasks`. Controllers handle HTTP concerns, while a service abstraction owns create, read, title-update, completion, uncompletion, and delete rules. The service returns snapshots from an in-memory collection so callers cannot mutate stored state directly.
 
-The in-memory store is intentionally simple: it seeds sample tasks and keeps them for the lifetime of the process. It will be replaced by Entity Framework Core and SQL Server in the final roadmap phase.
+The in-memory store is intentionally simple: it seeds sample tasks, accepts new tasks, and keeps them for the lifetime of the process. It will be replaced by Entity Framework Core and SQL Server in the final roadmap phase.
 
 ## Task model
 
 | Field | Type | Notes |
 | --- | --- | --- |
-| `id` | `number` | Identifier assigned when the task is seeded. |
-| `title` | `string` | Editable through `PUT`, 1-200 characters. |
-| `isCompleted` | `boolean` | Updated through `PATCH /api/tasks/{id}/complete`. |
-| `createdAt` | `datetime` | Assigned when the task is seeded. |
+| `id` | `number` | Identifier assigned when the task is seeded or created. |
+| `title` | `string` | Set on create and editable through `PUT`, 1-200 characters. |
+| `isCompleted` | `boolean` | Updated through `PATCH` complete and uncomplete endpoints. |
+| `createdAt` | `datetime` | Assigned when the task is seeded or created. |
 
 ## API contract
 
@@ -42,8 +42,10 @@ The in-memory store is intentionally simple: it seeds sample tasks and keeps the
 | --- | --- | --- |
 | `GET` | `/api/tasks` | Returns all tasks. |
 | `GET` | `/api/tasks/{id}` | Returns one task. |
+| `POST` | `/api/tasks` | Creates a task. |
 | `PUT` | `/api/tasks/{id}` | Updates only the task title. |
 | `PATCH` | `/api/tasks/{id}/complete` | Marks a task as completed. |
+| `PATCH` | `/api/tasks/{id}/uncomplete` | Marks a task as uncompleted. |
 | `DELETE` | `/api/tasks/{id}` | Removes a task. |
 
 All requests and responses use `application/json`. The frontend treats non-success responses as errors and renders them through a shared error state.
@@ -52,8 +54,9 @@ All requests and responses use `application/json`. The frontend treats non-succe
 
 - Collection state lives in a small application store or a top-level component.
 - Components receive data through properties and emit custom events for user actions.
+- Creation uses a form in `task-app` and appends the returned task.
 - Title editing uses a local draft in `task-item` and emits `task-update` only on save.
-- Completion and delete actions emit `task-complete` and `task-delete` from `task-item`.
+- Completion, uncompletion, and delete actions emit `task-complete`, `task-uncomplete`, and `task-delete` from `task-item`.
 - Loading state is shown while requests are in flight.
 - Error state is shown when a request fails.
 - Filtering is applied client-side after the list is loaded.
@@ -70,7 +73,7 @@ Pull requests target `develop`, except hotfixes, which target both `main` and `d
 
 ## Evolution path
 
-1. Add in-memory read, title-update, completion, and delete operations to the ASP.NET Core API.
+1. Add in-memory create, read, title-update, completion, uncompletion, and delete operations to the ASP.NET Core API.
 2. Build the LitElement components and static shell.
 3. Connect components to the REST API.
 4. Add filtering, loading, and error handling.

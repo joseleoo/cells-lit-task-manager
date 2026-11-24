@@ -12,6 +12,7 @@ export class TaskItem extends LitElement {
     this.task = null;
     this.editing = false;
     this.draftTitle = '';
+    
   }
 
   render() {
@@ -50,7 +51,7 @@ export class TaskItem extends LitElement {
           <span>${formatDate(this.task.createdAt)}</span>
           <div class="actions">
             ${completed
-              ? nothing
+              ? html`<button type="button" class="uncomplete" @click=${this.handleUncomplete}>Mark uncomplete</button>`
               : html`<button type="button" class="complete" @click=${this.handleComplete}>Mark complete</button>`}
             <button type="button" class="edit" @click=${this.startEdit}>Edit</button>
             <button type="button" class="delete" @click=${this.handleDelete}>Delete</button>
@@ -106,6 +107,16 @@ export class TaskItem extends LitElement {
   handleComplete() {
     this.dispatchEvent(
       new CustomEvent('task-complete', {
+        detail: { id: this.task.id },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  handleUncomplete() {
+    this.dispatchEvent(
+      new CustomEvent('task-uncomplete', {
         detail: { id: this.task.id },
         bubbles: true,
         composed: true
@@ -217,6 +228,10 @@ export class TaskItem extends LitElement {
 
     .complete {
       color: #15803d;
+    }
+
+    .uncomplete {
+      color: #b45309;
     }
 
     .edit {

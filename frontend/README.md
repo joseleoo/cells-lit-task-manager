@@ -1,6 +1,6 @@
 # Task Manager Frontend
 
-A minimal LitElement/Web Components frontend for the Task Manager API. It lists tasks, edits titles, marks tasks completed, and deletes tasks through the REST backend.
+A minimal LitElement/Web Components frontend for the Task Manager API. It creates tasks, edits titles, marks tasks completed or uncompleted, and deletes tasks through the REST backend.
 
 ## Technology stack
 
@@ -43,8 +43,10 @@ npm run preview
 ## What the UI does
 
 - Loads all tasks on startup from `GET /api/tasks`.
+- Creates a task with `POST /api/tasks`.
 - Edits only the title with `PUT /api/tasks/{id}`.
 - Marks a task completed with `PATCH /api/tasks/{id}/complete`.
+- Marks a task uncompleted with `PATCH /api/tasks/{id}/uncomplete`.
 - Removes a task with `DELETE /api/tasks/{id}`.
 - Shows loading and error messages while requests run.
 
@@ -71,4 +73,4 @@ frontend/
 └── README.md
 ```
 
-`task-app` owns the application state, `task-list` renders the collection, and `task-item` renders a single task and emits `task-update`, `task-complete`, and `task-delete` events.
+`task-app` owns the application state and create form, `task-list` renders the collection, and `task-item` renders a single task and emits `task-update`, `task-complete`, `task-uncomplete`, and `task-delete` events.

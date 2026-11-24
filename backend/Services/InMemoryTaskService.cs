@@ -31,6 +31,25 @@ public class InMemoryTaskService : ITaskService
         }
     }
 
+    public TaskModel Create(CreateTaskDto dto)
+    {
+        var title = NormalizeTitle(dto.Title);
+
+        lock (_sync)
+        {
+            var task = new TaskModel
+            {
+                Id = _nextId++,
+                Title = title,
+                IsCompleted = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _tasks.Add(task);
+            return Clone(task);
+        }
+    }
+
     public TaskModel? Update(int id, UpdateTaskDto dto)
     {
         var title = NormalizeTitle(dto.Title);
@@ -59,6 +78,21 @@ public class InMemoryTaskService : ITaskService
             }
 
             task.IsCompleted = true;
+            return Clone(task);
+        }
+    }
+
+    public TaskModel? Uncomplete(int id)
+    {
+        lock (_sync)
+        {
+            var task = _tasks.FirstOrDefault(x => x.Id == id);
+            if (task is null)
+            {
+                return null;
+            }
+
+            task.IsCompleted = false;
             return Clone(task);
         }
     }

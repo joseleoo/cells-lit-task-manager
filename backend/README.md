@@ -43,8 +43,10 @@ The service starts with three sample tasks: `Review project requirements`, `Desi
 | --- | --- | --- | --- |
 | `GET` | `/api/tasks` | List all tasks | `200 OK` |
 | `GET` | `/api/tasks/{id}` | Get one task | `200 OK` |
+| `POST` | `/api/tasks` | Create a task | `201 Created` |
 | `PUT` | `/api/tasks/{id}` | Update only the task title | `200 OK` |
 | `PATCH` | `/api/tasks/{id}/complete` | Mark a task as completed | `200 OK` |
+| `PATCH` | `/api/tasks/{id}/uncomplete` | Mark a task as uncompleted | `200 OK` |
 | `DELETE` | `/api/tasks/{id}` | Delete a task | `204 No Content` |
 
 Missing resources return `404 Not Found`. Invalid titles return `400 Bad Request`.
@@ -107,6 +109,29 @@ If the id does not exist:
 HTTP/1.1 404 Not Found
 ```
 
+### Create a task
+
+```bash
+curl -k -i -X POST https://localhost:5001/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Write API documentation"}'
+```
+
+```http
+HTTP/1.1 201 Created
+Location: https://localhost:5001/api/tasks/4
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 4,
+  "title": "Write API documentation",
+  "isCompleted": false,
+  "createdAt": "2026-11-24T18:30:00.1234567Z"
+}
+```
+
+An empty or too-long title returns `400 Bad Request`.
+
 ### Edit a task title
 
 Only `title` is accepted. `isCompleted` and `createdAt` remain unchanged.
@@ -155,6 +180,24 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
+### Mark a task uncompleted
+
+```bash
+curl -k -i -X PATCH https://localhost:5001/api/tasks/2/uncomplete
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 2,
+  "title": "Design task list component",
+  "isCompleted": false,
+  "createdAt": "2026-11-24T18:10:00.1234567Z"
+}
+```
+
 ### Delete a task
 
 ```bash
@@ -172,6 +215,7 @@ backend/
 ├── Controllers/
 │   └── TasksController.cs
 ├── DTOs/
+│   ├── CreateTaskDto.cs
 │   └── UpdateTaskDto.cs
 ├── Models/
 │   └── Task.cs

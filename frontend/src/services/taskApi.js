@@ -4,12 +4,21 @@ export function getTasks() {
   return request('GET');
 }
 
+export function createTask(title) {
+  return request('POST', undefined, { title });
+}
+
 export function updateTask(id, title) {
   return request('PUT', id, { title });
 }
 
 export function completeTask(id) {
+  debugger;
   return request('PATCH', `${id}/complete`);
+}
+
+export function uncompleteTask(id) {
+  return request('PATCH', `${id}/uncomplete`);
 }
 
 export function deleteTask(id) {

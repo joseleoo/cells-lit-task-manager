@@ -74,13 +74,15 @@ The frontend consumes the backend through the REST endpoints below.
 | --- | --- | --- |
 | `GET` | `/api/tasks` | List all tasks. |
 | `GET` | `/api/tasks/{id}` | Get one task. |
+| `POST` | `/api/tasks` | Create a task. |
 | `PUT` | `/api/tasks/{id}` | Update only the task title. |
 | `PATCH` | `/api/tasks/{id}/complete` | Mark a task as completed. |
+| `PATCH` | `/api/tasks/{id}/uncomplete` | Mark a task as uncompleted. |
 | `DELETE` | `/api/tasks/{id}` | Delete a task. |
 
 ## Roadmap
 
-1. In-memory backend read, title-update, completion, and delete operations.
+1. In-memory backend create, read, title-update, completion, uncompletion, and delete operations.
 2. Frontend implementation using LitElement and Web Components.
 3. Frontend-backend integration.
 4. Filtering, loading states, and error handling.

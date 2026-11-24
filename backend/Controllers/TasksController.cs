@@ -25,6 +25,27 @@ public class TasksController(ITaskService taskService) : ControllerBase
         return task is null ? NotFound() : Ok(task);
     }
 
+    [HttpPost]
+    [ProducesResponseType(typeof(TaskModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<TaskModel> Create([FromBody] CreateTaskDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var task = taskService.Create(dto);
+            return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(TaskModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,6 +74,15 @@ public class TasksController(ITaskService taskService) : ControllerBase
     public ActionResult<TaskModel> Complete(int id)
     {
         var task = taskService.Complete(id);
+        return task is null ? NotFound() : Ok(task);
+    }
+
+    [HttpPatch("{id:int}/uncomplete")]
+    [ProducesResponseType(typeof(TaskModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<TaskModel> Uncomplete(int id)
+    {
+        var task = taskService.Uncomplete(id);
         return task is null ? NotFound() : Ok(task);
     }
 
