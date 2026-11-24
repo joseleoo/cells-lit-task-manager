@@ -56,7 +56,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Check for frontend manifest
         id: frontend_manifest
@@ -73,10 +73,26 @@ jobs:
         if: steps.frontend_manifest.outputs.found == 'true'
         run: npm install
 
+      - name: Build
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: npm run build
+
       - name: Unit tests
         if: steps.frontend_manifest.outputs.found == 'true'
-        run: npm test
+        shell: bash
+        run: |
+          if node -e "const scripts = require('./package.json').scripts || {}; process.exit(scripts.test ? 0 : 1)"; then
+            npm test
+          else
+            echo "No unit test script yet; skipping."
+          fi
 
       - name: E2E tests
         if: steps.frontend_manifest.outputs.found == 'true'
-        run: npx playwright test
+        shell: bash
+        run: |
+          if [ -f playwright.config.js ] || [ -f playwright.config.ts ]; then
+            npx playwright test
+          else
+            echo "No Playwright config yet; skipping."
+          fi

@@ -1,0 +1,14 @@
+{
+  "name": "cells-lit-task-manager",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "app:serve": "concurrently -n api,web -c cyan,magenta \"npm run api:serve\" \"npm run web:serve\"",
+    "api:serve": "dotnet run --project backend/TaskManager.Api.csproj --launch-profile https",
+    "web:serve": "npm --prefix frontend run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}

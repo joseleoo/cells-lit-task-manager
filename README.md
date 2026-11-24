@@ -6,7 +6,7 @@ A simple full-stack application for task management.
 
 Learn and demonstrate Web Components, LitElement, Polymer 2, REST API consumption, unit testing, E2E testing, and Gitflow.
 
-> This repository currently contains the initial structure and documentation. Application code will be added in the roadmap phases below.
+> The in-memory ASP.NET Core API and a basic LitElement frontend are implemented. Remaining roadmap phases build on that foundation.
 
 ## Technology stack
 
@@ -20,8 +20,16 @@ Learn and demonstrate Web Components, LitElement, Polymer 2, REST API consumptio
 ```text
 cells-lit-task-manager/
 ├── backend/
+│   ├── Controllers/
+│   ├── DTOs/
+│   ├── Models/
+│   ├── Services/
+│   ├── Program.cs
 │   └── README.md
 ├── frontend/
+│   ├── src/
+│   ├── index.html
+│   ├── package.json
 │   └── README.md
 ├── docs/
 │   └── architecture.md
@@ -30,43 +38,47 @@ cells-lit-task-manager/
 │       └── ci.yml
 ├── .gitignore
 ├── LICENSE
+├── package.json
+├── package-lock.json
 └── README.md
 ```
 
 ## Running the project
 
-These commands will be available once the corresponding roadmap phases are implemented.
+Prerequisites: .NET 8 SDK and Node.js 22 or newer.
 
-### Backend
-
-```bash
-cd backend
-dotnet restore
-dotnet run
-```
-
-### Frontend
+From the repository root:
 
 ```bash
-cd frontend
 npm install
-npm run dev
+npm run app:serve
 ```
 
-The frontend will consume the backend through the planned REST endpoints below.
+This starts both services together:
 
-## Planned API endpoints
+- API: `https://localhost:5001` (Swagger at `/swagger`)
+- Frontend: `http://localhost:5173`
+
+Individual commands are also available:
+
+```bash
+npm run api:serve
+npm run web:serve
+```
+
+The frontend consumes the backend through the REST endpoints below.
+
+## API endpoints
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | `GET` | `/api/tasks` | List all tasks. |
-| `POST` | `/api/tasks` | Create a new task. |
-| `PUT` | `/api/tasks/{id}` | Update an existing task. |
+| `GET` | `/api/tasks/{id}` | Get one task. |
 | `DELETE` | `/api/tasks/{id}` | Delete a task. |
 
 ## Roadmap
 
-1. In-memory backend CRUD operations.
+1. In-memory backend read and delete operations.
 2. Frontend implementation using LitElement and Web Components.
 3. Frontend-backend integration.
 4. Filtering, loading states, and error handling.
