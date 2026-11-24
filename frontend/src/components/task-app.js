@@ -1,21 +1,28 @@
-import { LitElement, html, css, nothing } from 'lit';
-import { completeTask, createTask, deleteTask, getTasks, uncompleteTask, updateTask } from '../services/taskApi.js';
-import './task-list.js';
+import { LitElement, html, css, nothing } from "lit";
+import {
+  completeTask,
+  createTask,
+  deleteTask,
+  getTasks,
+  uncompleteTask,
+  updateTask,
+} from "../services/taskApi.js";
+import "./task-list.js";
 
 export class TaskApp extends LitElement {
   static properties = {
     tasks: { state: true },
     newTitle: { state: true },
     loading: { state: true },
-    error: { state: true }
+    error: { state: true },
   };
 
   constructor() {
     super();
     this.tasks = [];
-    this.newTitle = '';
+    this.newTitle = "";
     this.loading = false;
-    this.error = '';
+    this.error = "";
   }
 
   connectedCallback() {
@@ -28,7 +35,10 @@ export class TaskApp extends LitElement {
       <section class="shell">
         <header>
           <h1>Task Manager</h1>
-          <p>Create, review, edit, complete, uncomplete, and delete tasks loaded from the ASP.NET Core API.</p>
+          <p>
+            Create, review, edit, complete, uncomplete, and delete tasks loaded
+            from the ASP.NET Core API.
+          </p>
         </header>
 
         <form class="create-form" @submit=${this.handleSubmit}>
@@ -39,11 +49,14 @@ export class TaskApp extends LitElement {
             maxlength="200"
             @input=${this.handleNewTitleInput}
           />
-          <button type="submit" ?disabled=${!this.newTitle.trim()}>Add task</button>
+          <button type="submit" ?disabled=${!this.newTitle.trim()}>
+            Add task
+          </button>
         </form>
 
-        ${this.error ? html`<p class="error" role="alert">${this.error}</p>` : nothing}
-
+        ${this.error
+          ? html`<p class="error" role="alert">${this.error}</p>`
+          : nothing}
         ${this.loading
           ? html`<p class="status">Loading...</p>`
           : html`<task-list
@@ -59,7 +72,7 @@ export class TaskApp extends LitElement {
 
   async loadTasks() {
     this.loading = true;
-    this.error = '';
+    this.error = "";
 
     try {
       this.tasks = await getTasks();
@@ -83,12 +96,12 @@ export class TaskApp extends LitElement {
       return;
     }
 
-    this.error = '';
+    this.error = "";
 
     try {
       const created = await createTask(title);
       this.tasks = [...this.tasks, created];
-      this.newTitle = '';
+      this.newTitle = "";
     } catch (error) {
       this.error = error.message;
     }
@@ -96,7 +109,7 @@ export class TaskApp extends LitElement {
 
   async handleUpdate(event) {
     const { id, title } = event.detail;
-    this.error = '';
+    this.error = "";
 
     try {
       const updated = await updateTask(id, title);
@@ -108,10 +121,10 @@ export class TaskApp extends LitElement {
 
   async handleComplete(event) {
     const id = event.detail.id;
-    this.error = '';
+    this.error = "";
 
     try {
-    const updated=  await completeTask(id);
+      const updated = await completeTask(id);
       this.tasks = this.tasks.map((item) => (item.id === id ? updated : item));
     } catch (error) {
       this.error = error.message;
@@ -120,7 +133,7 @@ export class TaskApp extends LitElement {
 
   async handleUncomplete(event) {
     const id = event.detail.id;
-    this.error = '';
+    this.error = "";
 
     try {
       const updated = await uncompleteTask(id);
@@ -132,7 +145,7 @@ export class TaskApp extends LitElement {
 
   async handleDelete(event) {
     const id = event.detail.id;
-    this.error = '';
+    this.error = "";
 
     try {
       await deleteTask(id);
@@ -207,6 +220,6 @@ export class TaskApp extends LitElement {
   `;
 }
 
-if (!customElements.get('task-app')) {
-  customElements.define('task-app', TaskApp);
+if (!customElements.get("task-app")) {
+  customElements.define("task-app", TaskApp);
 }
