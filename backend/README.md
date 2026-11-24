@@ -1,12 +1,13 @@
 # Task Manager API
 
-A minimal ASP.NET Core 8 REST API for reading and deleting tasks stored in memory. It is the backend for the Task Manager monorepo and is consumed by a LitElement/Web Components frontend.
+A minimal ASP.NET Core 8 REST API for reading, editing titles, and deleting tasks stored in memory. It is the backend for the Task Manager monorepo and is consumed by a LitElement/Web Components frontend.
 
 ## Stack
 
 - .NET 8 and ASP.NET Core 8 Web API
-- Controllers, services, and models
+- Controllers, services, models, and DTOs
 - Dependency injection with a singleton in-memory task service
+- Data Annotations validation for title updates
 - Swagger/OpenAPI with Swashbuckle
 - CORS for `http://localhost:8000` and `http://localhost:5173`
 
@@ -42,9 +43,10 @@ The service starts with three sample tasks: `Review project requirements`, `Desi
 | --- | --- | --- | --- |
 | `GET` | `/api/tasks` | List all tasks | `200 OK` |
 | `GET` | `/api/tasks/{id}` | Get one task | `200 OK` |
+| `PUT` | `/api/tasks/{id}` | Update only the task title | `200 OK` |
 | `DELETE` | `/api/tasks/{id}` | Delete a task | `204 No Content` |
 
-Missing resources return `404 Not Found`.
+Missing resources return `404 Not Found`. Invalid titles return `400 Bad Request`.
 
 ## Examples
 
@@ -104,6 +106,36 @@ If the id does not exist:
 HTTP/1.1 404 Not Found
 ```
 
+### Edit a task title
+
+Only `title` is accepted. `isCompleted` and `createdAt` remain unchanged.
+
+```bash
+curl -k -i -X PUT https://localhost:5001/api/tasks/1 \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Review requirements with the team"}'
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 1,
+  "title": "Review requirements with the team",
+  "isCompleted": true,
+  "createdAt": "2026-11-24T18:00:00.1234567Z"
+}
+```
+
+An empty or too-long title returns `400 Bad Request`:
+
+```bash
+curl -k -i -X PUT https://localhost:5001/api/tasks/1 \
+  -H "Content-Type: application/json" \
+  -d '{"title":""}'
+```
+
 ### Delete a task
 
 ```bash
@@ -120,6 +152,8 @@ HTTP/1.1 204 No Content
 backend/
 ├── Controllers/
 │   └── TasksController.cs
+├── DTOs/
+│   └── UpdateTaskDto.cs
 ├── Models/
 │   └── Task.cs
 ├── Services/

@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from 'lit';
-import { deleteTask, getTasks } from '../services/taskApi.js';
+import { deleteTask, getTasks, updateTask } from '../services/taskApi.js';
 import './task-list.js';
 
 export class TaskApp extends LitElement {
@@ -26,14 +26,18 @@ export class TaskApp extends LitElement {
       <section class="shell">
         <header>
           <h1>Task Manager</h1>
-          <p>Review tasks loaded from the ASP.NET Core API.</p>
+          <p>Review, edit, and delete tasks loaded from the ASP.NET Core API.</p>
         </header>
 
         ${this.error ? html`<p class="error" role="alert">${this.error}</p>` : nothing}
 
         ${this.loading
           ? html`<p class="status">Loading...</p>`
-          : html`<task-list .tasks=${this.tasks} @task-delete=${this.handleDelete}></task-list>`}
+          : html`<task-list
+              .tasks=${this.tasks}
+              @task-update=${this.handleUpdate}
+              @task-delete=${this.handleDelete}
+            ></task-list>`}
       </section>
     `;
   }
@@ -48,6 +52,18 @@ export class TaskApp extends LitElement {
       this.error = error.message;
     } finally {
       this.loading = false;
+    }
+  }
+
+  async handleUpdate(event) {
+    const { id, title } = event.detail;
+    this.error = '';
+
+    try {
+      const updated = await updateTask(id, title);
+      this.tasks = this.tasks.map((item) => (item.id === id ? updated : item));
+    } catch (error) {
+      this.error = error.message;
     }
   }
 

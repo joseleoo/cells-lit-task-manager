@@ -2,17 +2,40 @@ import { LitElement, html, css, nothing } from 'lit';
 
 export class TaskItem extends LitElement {
   static properties = {
-    task: { type: Object }
+    task: { type: Object },
+    editing: { state: true },
+    draftTitle: { state: true }
   };
 
   constructor() {
     super();
     this.task = null;
+    this.editing = false;
+    this.draftTitle = '';
   }
 
   render() {
     if (!this.task) {
       return nothing;
+    }
+
+    if (this.editing) {
+      return html`
+        <div class="item editing">
+          <input
+            class="edit-input"
+            aria-label="Edit task title"
+            .value=${this.draftTitle}
+            maxlength="200"
+            @input=${this.handleDraftInput}
+            @keydown=${this.handleKeydown}
+          />
+          <div class="actions">
+            <button type="button" class="save" ?disabled=${!this.draftTitle.trim()} @click=${this.handleSave}>Save</button>
+            <button type="button" class="cancel" @click=${this.handleCancel}>Cancel</button>
+          </div>
+        </div>
+      `;
     }
 
     const completed = this.task.isCompleted;
@@ -25,10 +48,56 @@ export class TaskItem extends LitElement {
         </div>
         <div class="meta">
           <span>${formatDate(this.task.createdAt)}</span>
-          <button type="button" @click=${this.handleDelete}>Delete</button>
+          <div class="actions">
+            <button type="button" class="edit" @click=${this.startEdit}>Edit</button>
+            <button type="button" class="delete" @click=${this.handleDelete}>Delete</button>
+          </div>
         </div>
       </div>
     `;
+  }
+
+  startEdit() {
+    this.draftTitle = this.task.title;
+    this.editing = true;
+  }
+
+  handleDraftInput(event) {
+    this.draftTitle = event.target.value;
+  }
+
+  handleKeydown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.handleSave();
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.handleCancel();
+    }
+  }
+
+  handleSave() {
+    const title = this.draftTitle.trim();
+
+    if (!title) {
+      return;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('task-update', {
+        detail: { id: this.task.id, title },
+        bubbles: true,
+        composed: true
+      })
+    );
+
+    this.editing = false;
+  }
+
+  handleCancel() {
+    this.editing = false;
   }
 
   handleDelete() {
@@ -55,6 +124,11 @@ export class TaskItem extends LitElement {
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 10px;
+    }
+
+    .item.editing {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
     }
 
     .details {
@@ -100,16 +174,54 @@ export class TaskItem extends LitElement {
       white-space: nowrap;
     }
 
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .edit-input {
+      flex: 1;
+      min-width: 0;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+    }
+
     button {
       border: 0;
       background: transparent;
-      color: #dc2626;
       font: inherit;
       font-weight: 600;
       cursor: pointer;
     }
 
-    button:hover {
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .edit {
+      color: #2563eb;
+    }
+
+    .delete {
+      color: #dc2626;
+    }
+
+    .save {
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .cancel {
+      color: #6b7280;
+    }
+
+    button:hover:not(:disabled) {
       text-decoration: underline;
     }
 

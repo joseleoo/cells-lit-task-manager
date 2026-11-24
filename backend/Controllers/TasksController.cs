@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TaskManager.Api.DTOs;
 using TaskManager.Api.Services;
 using TaskModel = TaskManager.Api.Models.Task;
 
@@ -22,6 +23,28 @@ public class TasksController(ITaskService taskService) : ControllerBase
     {
         var task = taskService.GetById(id);
         return task is null ? NotFound() : Ok(task);
+    }
+
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(TaskModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<TaskModel> Update(int id, [FromBody] UpdateTaskDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var task = taskService.Update(id, dto);
+            return task is null ? NotFound() : Ok(task);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpDelete("{id:int}")]

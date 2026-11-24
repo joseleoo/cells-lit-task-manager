@@ -1,3 +1,4 @@
+using TaskManager.Api.DTOs;
 using TaskModel = TaskManager.Api.Models.Task;
 
 namespace TaskManager.Api.Services;
@@ -27,6 +28,23 @@ public class InMemoryTaskService : ITaskService
         {
             var task = _tasks.FirstOrDefault(x => x.Id == id);
             return task is null ? null : Clone(task);
+        }
+    }
+
+    public TaskModel? Update(int id, UpdateTaskDto dto)
+    {
+        var title = NormalizeTitle(dto.Title);
+
+        lock (_sync)
+        {
+            var task = _tasks.FirstOrDefault(x => x.Id == id);
+            if (task is null)
+            {
+                return null;
+            }
+
+            task.Title = title;
+            return Clone(task);
         }
     }
 
@@ -72,6 +90,18 @@ public class InMemoryTaskService : ITaskService
             IsCompleted = false,
             CreatedAt = now.AddMinutes(-10)
         });
+    }
+
+    private static string NormalizeTitle(string? title)
+    {
+        var normalized = title?.Trim() ?? string.Empty;
+
+        if (normalized.Length is 0 or > 200)
+        {
+            throw new ArgumentException("Title must contain between 1 and 200 characters.", nameof(title));
+        }
+
+        return normalized;
     }
 
     private static TaskModel Clone(TaskModel source) => new()

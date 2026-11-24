@@ -4,13 +4,21 @@ export function getTasks() {
   return request('GET');
 }
 
+export function updateTask(id, title) {
+  return request('PUT', id, { title });
+}
+
 export function deleteTask(id) {
   return request('DELETE', id);
 }
 
-async function request(method, id) {
+async function request(method, id, body) {
   const url = id === undefined ? API_BASE_URL : `${API_BASE_URL}/${id}`;
-  const response = await fetch(url, { method });
+  const response = await fetch(url, {
+    method,
+    headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
 
   if (!response.ok) {
     throw new Error(await readErrorMessage(response));

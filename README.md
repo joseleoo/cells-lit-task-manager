@@ -74,11 +74,12 @@ The frontend consumes the backend through the REST endpoints below.
 | --- | --- | --- |
 | `GET` | `/api/tasks` | List all tasks. |
 | `GET` | `/api/tasks/{id}` | Get one task. |
+| `PUT` | `/api/tasks/{id}` | Update only the task title. |
 | `DELETE` | `/api/tasks/{id}` | Delete a task. |
 
 ## Roadmap
 
-1. In-memory backend read and delete operations.
+1. In-memory backend read, title-update, and delete operations.
 2. Frontend implementation using LitElement and Web Components.
 3. Frontend-backend integration.
 4. Filtering, loading states, and error handling.
