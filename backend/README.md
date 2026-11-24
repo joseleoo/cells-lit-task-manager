@@ -35,7 +35,7 @@ dotnet run --launch-profile http
 
 If the HTTPS development certificate is not trusted, run `dotnet dev-certs https --trust` once.
 
-Data is stored only in memory inside the singleton service. Restarting the API clears all tasks.
+The service starts with three sample tasks: `Review project requirements`, `Design task list component`, and `Connect frontend to the API`. Data is stored only in memory, so restarting the API restores the original sample tasks.
 
 ## Endpoints
 
@@ -61,11 +61,11 @@ curl -i -X POST https://localhost:5001/api/tasks \
 
 ```http
 HTTP/1.1 201 Created
-Location: https://localhost:5001/api/tasks/1
+Location: https://localhost:5001/api/tasks/4
 Content-Type: application/json; charset=utf-8
 
 {
-  "id": 1,
+  "id": 4,
   "title": "Prepare demo",
   "isCompleted": false,
   "createdAt": "2026-11-24T18:30:00.1234567Z"
@@ -85,6 +85,24 @@ Content-Type: application/json; charset=utf-8
 [
   {
     "id": 1,
+    "title": "Review project requirements",
+    "isCompleted": true,
+    "createdAt": "2026-11-24T18:00:00.1234567Z"
+  },
+  {
+    "id": 2,
+    "title": "Design task list component",
+    "isCompleted": false,
+    "createdAt": "2026-11-24T18:10:00.1234567Z"
+  },
+  {
+    "id": 3,
+    "title": "Connect frontend to the API",
+    "isCompleted": false,
+    "createdAt": "2026-11-24T18:20:00.1234567Z"
+  },
+  {
+    "id": 4,
     "title": "Prepare demo",
     "isCompleted": false,
     "createdAt": "2026-11-24T18:30:00.1234567Z"
@@ -95,7 +113,7 @@ Content-Type: application/json; charset=utf-8
 ### Get a task by id
 
 ```bash
-curl -i https://localhost:5001/api/tasks/1
+curl -i https://localhost:5001/api/tasks/4
 ```
 
 ```http
@@ -103,7 +121,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 
 {
-  "id": 1,
+  "id": 4,
   "title": "Prepare demo",
   "isCompleted": false,
   "createdAt": "2026-11-24T18:30:00.1234567Z"
@@ -121,7 +139,7 @@ HTTP/1.1 404 Not Found
 Both fields are optional, so a partial payload is valid.
 
 ```bash
-curl -i -X PUT https://localhost:5001/api/tasks/1 \
+curl -i -X PUT https://localhost:5001/api/tasks/4 \
   -H "Content-Type: application/json" \
   -d '{"isCompleted":true}'
 ```
@@ -131,7 +149,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 
 {
-  "id": 1,
+  "id": 4,
   "title": "Prepare demo",
   "isCompleted": true,
   "createdAt": "2026-11-24T18:30:00.1234567Z"
@@ -149,7 +167,7 @@ curl -i -X POST https://localhost:5001/api/tasks \
 ### Delete a task
 
 ```bash
-curl -i -X DELETE https://localhost:5001/api/tasks/1
+curl -i -X DELETE https://localhost:5001/api/tasks/4
 ```
 
 ```http

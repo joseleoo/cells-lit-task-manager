@@ -9,6 +9,11 @@ public class InMemoryTaskService : ITaskService
     private readonly List<TaskModel> _tasks = new();
     private int _nextId = 1;
 
+    public InMemoryTaskService()
+    {
+        SeedTasks();
+    }
+
     public IReadOnlyList<TaskModel> GetAll()
     {
         lock (_sync)
@@ -84,6 +89,35 @@ public class InMemoryTaskService : ITaskService
             _tasks.Remove(task);
             return true;
         }
+    }
+
+    private void SeedTasks()
+    {
+        var now = DateTime.UtcNow;
+
+        _tasks.Add(new TaskModel
+        {
+            Id = _nextId++,
+            Title = "Review project requirements",
+            IsCompleted = true,
+            CreatedAt = now.AddMinutes(-30)
+        });
+
+        _tasks.Add(new TaskModel
+        {
+            Id = _nextId++,
+            Title = "Design task list component",
+            IsCompleted = false,
+            CreatedAt = now.AddMinutes(-20)
+        });
+
+        _tasks.Add(new TaskModel
+        {
+            Id = _nextId++,
+            Title = "Connect frontend to the API",
+            IsCompleted = false,
+            CreatedAt = now.AddMinutes(-10)
+        });
     }
 
     private static string NormalizeTitle(string? title)
