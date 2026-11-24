@@ -111,7 +111,8 @@ export class TaskApp extends LitElement {
     this.error = '';
 
     try {
-      await completeTask(id);
+    const updated=  await completeTask(id);
+      this.tasks = this.tasks.map((item) => (item.id === id ? updated : item));
     } catch (error) {
       this.error = error.message;
     }
