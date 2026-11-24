@@ -1,18 +1,18 @@
 # Task Manager
 
-A simple full-stack application for task management.
+A full-stack task manager with an ASP.NET Core 8 REST API and a LitElement/Web Components frontend.
 
 ## Objective
 
 Learn and demonstrate Web Components, LitElement, Polymer 2, REST API consumption, unit testing, E2E testing, and Gitflow.
 
-> The in-memory ASP.NET Core API and a basic LitElement frontend are implemented. Remaining roadmap phases build on that foundation.
+> Current phase: the API and frontend support create, read, title editing, completion, uncompletion, and delete with in-memory persistence.
 
 ## Technology stack
 
 - **Frontend:** LitElement, Web Components, JavaScript ES6+, HTML5, CSS3.
 - **Backend:** ASP.NET Core 8 Web API.
-- **Testing:** Vitest or Web Test Runner, Playwright.
+- **Testing (planned):** Vitest or Web Test Runner, Playwright.
 - **Version control:** Git and Gitflow.
 
 ## Repository structure
@@ -42,6 +42,15 @@ cells-lit-task-manager/
 ├── package-lock.json
 └── README.md
 ```
+
+## Current features
+
+- Seeded in-memory tasks plus creation through `POST /api/tasks`.
+- Title-only editing through `PUT /api/tasks/{id}`.
+- Completion and uncompletion through dedicated `PATCH` endpoints.
+- Deletion through `DELETE /api/tasks/{id}`.
+- LitElement UI with a create form, inline title editor, status badges, loading, and error states.
+- Swagger/OpenAPI and CORS configured for local frontend development.
 
 ## Running the project
 
@@ -82,20 +91,21 @@ The frontend consumes the backend through the REST endpoints below.
 
 ## Roadmap
 
-1. In-memory backend create, read, title-update, completion, uncompletion, and delete operations.
-2. Frontend implementation using LitElement and Web Components.
-3. Frontend-backend integration.
-4. Filtering, loading states, and error handling.
-5. Unit testing.
-6. E2E testing with Playwright.
-7. CI with GitHub Actions.
-8. SQL Server persistence with Entity Framework.
+1. [x] In-memory backend create, read, title-update, completion, uncompletion, and delete operations.
+2. [x] Frontend implementation using LitElement and Web Components.
+3. [x] Frontend-backend integration.
+4. [x] Loading states and error handling.
+5. [ ] Filtering.
+6. [ ] Unit testing.
+7. [ ] E2E testing with Playwright.
+8. [x] CI workflow with GitHub Actions.
+9. [ ] SQL Server persistence with Entity Framework.
 
 ## How to Contribute
 
 1. Create a `feature/*` branch from `develop`.
 2. Keep each change focused on a single roadmap phase or concern.
-3. Run the available unit and E2E tests before opening a pull request.
+3. Run the available builds and any tests that are present before opening a pull request.
 4. Open a pull request targeting `develop` with a short description of the change.
 
 `main` is reserved for stable releases, while `develop` is the integration branch used for Gitflow.

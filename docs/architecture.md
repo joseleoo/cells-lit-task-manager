@@ -59,7 +59,7 @@ All requests and responses use `application/json`. The frontend treats non-succe
 - Completion, uncompletion, and delete actions emit `task-complete`, `task-uncomplete`, and `task-delete` from `task-item`.
 - Loading state is shown while requests are in flight.
 - Error state is shown when a request fails.
-- Filtering is applied client-side after the list is loaded.
+- Filtering is planned as a client-side feature after the list is loaded.
 
 ## Gitflow
 
@@ -76,7 +76,7 @@ Pull requests target `develop`, except hotfixes, which target both `main` and `d
 1. Add in-memory create, read, title-update, completion, uncompletion, and delete operations to the ASP.NET Core API.
 2. Build the LitElement components and static shell.
 3. Connect components to the REST API.
-4. Add filtering, loading, and error handling.
+4. Add filtering; loading and error handling are already in place.
 5. Add unit tests.
 6. Add Playwright E2E coverage.
 7. Enable GitHub Actions CI.

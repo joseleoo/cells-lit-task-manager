@@ -1,13 +1,13 @@
 # Task Manager API
 
-A minimal ASP.NET Core 8 REST API for reading, editing titles, and deleting tasks stored in memory. It is the backend for the Task Manager monorepo and is consumed by a LitElement/Web Components frontend.
+A minimal ASP.NET Core 8 REST API for creating, reading, editing titles, toggling completion, and deleting tasks stored in memory. It is the backend for the Task Manager monorepo and is consumed by a LitElement/Web Components frontend.
 
 ## Stack
 
 - .NET 8 and ASP.NET Core 8 Web API
 - Controllers, services, models, and DTOs
 - Dependency injection with a singleton in-memory task service
-- Data Annotations validation for title updates
+- Data Annotations validation for create and title update DTOs
 - Swagger/OpenAPI with Swashbuckle
 - CORS for `http://localhost:8000` and `http://localhost:5173`
 
@@ -35,7 +35,7 @@ dotnet run --launch-profile http
 
 If the HTTPS development certificate is not trusted, run `dotnet dev-certs https --trust` once.
 
-The service starts with three sample tasks: `Review project requirements`, `Design task list component`, and `Connect frontend to the API`. Data is stored only in memory, so restarting the API restores the original sample tasks.
+The service starts with three sample tasks: `Review project requirements`, `Design task list component`, and `Connect frontend to the API`. New tasks are appended in memory, and restarting the API restores the original sample tasks.
 
 ## Endpoints
 
