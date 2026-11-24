@@ -53,6 +53,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -68,6 +73,10 @@ jobs:
             echo "found=false" >> "$GITHUB_OUTPUT"
             echo "Frontend project not present yet; skipping frontend checks."
           fi
+
+      - name: Prepare .NET development certificate
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: dotnet dev-certs https
 
       - name: Install dependencies
         if: steps.frontend_manifest.outputs.found == 'true'
@@ -87,12 +96,10 @@ jobs:
             echo "No unit test script yet; skipping."
           fi
 
+      - name: Install Playwright browsers
+        if: steps.frontend_manifest.outputs.found == 'true'
+        run: npx playwright install --with-deps chromium
+
       - name: E2E tests
         if: steps.frontend_manifest.outputs.found == 'true'
-        shell: bash
-        run: |
-          if [ -f playwright.config.js ] || [ -f playwright.config.ts ]; then
-            npx playwright test
-          else
-            echo "No Playwright config yet; skipping."
-          fi
+        run: npm run test:e2e

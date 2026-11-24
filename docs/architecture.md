@@ -14,12 +14,12 @@ Browser
 
 ## Frontend boundary
 
-The frontend owns presentation and user interaction only. Custom elements built with LitElement render the task list, inline title editor, and delete action. Data access is isolated in a service module that uses `fetch` to call the API, so components do not depend on endpoint details.
+The frontend owns presentation and user interaction only. Custom elements built with LitElement render the task list, create form, inline title editor, completion controls, and delete action. Data access is isolated in a service module that uses `fetch` to call the API, so components do not depend on endpoint details.
 
-Planned testing layers:
+Testing layers:
 
-- Unit tests with Vitest or Web Test Runner for components and the API service.
-- E2E tests with Playwright for the full task lifecycle in a real browser.
+- Unit tests with Vitest or Web Test Runner for components and the API service are planned.
+- E2E tests with Playwright cover the main task lifecycle in a real browser.
 
 ## Backend boundary
 
@@ -78,6 +78,6 @@ Pull requests target `develop`, except hotfixes, which target both `main` and `d
 3. Connect components to the REST API.
 4. Add filtering; loading and error handling are already in place.
 5. Add unit tests.
-6. Add Playwright E2E coverage.
+6. Playwright E2E coverage is in place.
 7. Enable GitHub Actions CI.
 8. Replace the in-memory store with Entity Framework Core and SQL Server.

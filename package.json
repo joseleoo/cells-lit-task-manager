@@ -6,7 +6,8 @@
   "scripts": {
     "app:serve": "concurrently -n api,web -c cyan,magenta \"npm run api:serve\" \"npm run web:serve\"",
     "api:serve": "dotnet run --project backend/TaskManager.Api.csproj --launch-profile https",
-    "web:serve": "npm --prefix frontend run dev"
+    "web:serve": "npm --prefix frontend run dev",
+    "test:e2e": "npm --prefix frontend run test:e2e"
   },
   "devDependencies": {
     "concurrently": "^10.0.7"

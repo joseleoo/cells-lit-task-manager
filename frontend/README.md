@@ -38,6 +38,16 @@ Other commands:
 ```bash
 npm run build
 npm run preview
+npm run test:e2e
+npm run test:e2e:ui
+```
+
+## Testing
+
+Playwright covers loading, creating, editing, deleting, the completion API, and uncompletion from the UI. The test run starts the backend and Vite automatically and uses `.env.test` for the API address.
+
+```bash
+npm run test:e2e
 ```
 
 ## What the UI does
@@ -50,7 +60,7 @@ npm run preview
 - Removes a task with `DELETE /api/tasks/{id}`.
 - Shows loading and error messages while requests run.
 
-Unit tests with Vitest/Web Test Runner and E2E tests with Playwright will be added in later roadmap phases.
+Unit tests with Vitest/Web Test Runner will be added in a later roadmap phase.
 
 ## Repository structure
 
@@ -66,9 +76,13 @@ frontend/
 │   ├── styles/
 │   │   └── global.css
 │   └── main.js
+├── tests/
+│   └── tasks.spec.js
 ├── .env.example
+├── .env.test
 ├── index.html
 ├── package.json
+├── playwright.config.js
 ├── vite.config.js
 └── README.md
 ```

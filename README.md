@@ -12,7 +12,7 @@ Learn and demonstrate Web Components, LitElement, Polymer 2, REST API consumptio
 
 - **Frontend:** LitElement, Web Components, JavaScript ES6+, HTML5, CSS3.
 - **Backend:** ASP.NET Core 8 Web API.
-- **Testing (planned):** Vitest or Web Test Runner, Playwright.
+- **Testing:** Playwright for E2E; unit tests with Vitest or Web Test Runner are planned.
 - **Version control:** Git and Gitflow.
 
 ## Repository structure
@@ -51,6 +51,7 @@ cells-lit-task-manager/
 - Deletion through `DELETE /api/tasks/{id}`.
 - LitElement UI with a create form, inline title editor, status badges, loading, and error states.
 - Swagger/OpenAPI and CORS configured for local frontend development.
+- Playwright E2E coverage for the main task lifecycle.
 
 ## Running the project
 
@@ -75,6 +76,16 @@ npm run api:serve
 npm run web:serve
 ```
 
+## Testing
+
+Run the Playwright suite from the repository root. It starts the API and frontend automatically:
+
+```bash
+npm run test:e2e
+```
+
+From `frontend`, `npm run test:e2e:ui` opens the interactive runner. Tests use `frontend/.env.test` to point the browser at the local API.
+
 The frontend consumes the backend through the REST endpoints below.
 
 ## API endpoints
@@ -97,7 +108,7 @@ The frontend consumes the backend through the REST endpoints below.
 4. [x] Loading states and error handling.
 5. [ ] Filtering.
 6. [ ] Unit testing.
-7. [ ] E2E testing with Playwright.
+7. [x] E2E testing with Playwright.
 8. [x] CI workflow with GitHub Actions.
 9. [ ] SQL Server persistence with Entity Framework.
 
@@ -105,7 +116,7 @@ The frontend consumes the backend through the REST endpoints below.
 
 1. Create a `feature/*` branch from `develop`.
 2. Keep each change focused on a single roadmap phase or concern.
-3. Run the available builds and any tests that are present before opening a pull request.
+3. Run the builds and E2E tests before opening a pull request.
 4. Open a pull request targeting `develop` with a short description of the change.
 
 `main` is reserved for stable releases, while `develop` is the integration branch used for Gitflow.
