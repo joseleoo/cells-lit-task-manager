@@ -44,6 +44,7 @@ The service starts with three sample tasks: `Review project requirements`, `Desi
 | `GET` | `/api/tasks` | List all tasks | `200 OK` |
 | `GET` | `/api/tasks/{id}` | Get one task | `200 OK` |
 | `PUT` | `/api/tasks/{id}` | Update only the task title | `200 OK` |
+| `PATCH` | `/api/tasks/{id}/complete` | Mark a task as completed | `200 OK` |
 | `DELETE` | `/api/tasks/{id}` | Delete a task | `204 No Content` |
 
 Missing resources return `404 Not Found`. Invalid titles return `400 Bad Request`.
@@ -134,6 +135,24 @@ An empty or too-long title returns `400 Bad Request`:
 curl -k -i -X PUT https://localhost:5001/api/tasks/1 \
   -H "Content-Type: application/json" \
   -d '{"title":""}'
+```
+
+### Mark a task completed
+
+```bash
+curl -k -i -X PATCH https://localhost:5001/api/tasks/2/complete
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": 2,
+  "title": "Design task list component",
+  "isCompleted": true,
+  "createdAt": "2026-11-24T18:10:00.1234567Z"
+}
 ```
 
 ### Delete a task

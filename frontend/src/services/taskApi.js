@@ -8,12 +8,16 @@ export function updateTask(id, title) {
   return request('PUT', id, { title });
 }
 
+export function completeTask(id) {
+  return request('PATCH', `${id}/complete`);
+}
+
 export function deleteTask(id) {
   return request('DELETE', id);
 }
 
-async function request(method, id, body) {
-  const url = id === undefined ? API_BASE_URL : `${API_BASE_URL}/${id}`;
+async function request(method, path, body) {
+  const url = path === undefined ? API_BASE_URL : `${API_BASE_URL}/${path}`;
   const response = await fetch(url, {
     method,
     headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },

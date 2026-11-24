@@ -47,6 +47,15 @@ public class TasksController(ITaskService taskService) : ControllerBase
         }
     }
 
+    [HttpPatch("{id:int}/complete")]
+    [ProducesResponseType(typeof(TaskModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<TaskModel> Complete(int id)
+    {
+        var task = taskService.Complete(id);
+        return task is null ? NotFound() : Ok(task);
+    }
+
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

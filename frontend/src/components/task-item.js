@@ -49,6 +49,9 @@ export class TaskItem extends LitElement {
         <div class="meta">
           <span>${formatDate(this.task.createdAt)}</span>
           <div class="actions">
+            ${completed
+              ? nothing
+              : html`<button type="button" class="complete" @click=${this.handleComplete}>Mark complete</button>`}
             <button type="button" class="edit" @click=${this.startEdit}>Edit</button>
             <button type="button" class="delete" @click=${this.handleDelete}>Delete</button>
           </div>
@@ -98,6 +101,16 @@ export class TaskItem extends LitElement {
 
   handleCancel() {
     this.editing = false;
+  }
+
+  handleComplete() {
+    this.dispatchEvent(
+      new CustomEvent('task-complete', {
+        detail: { id: this.task.id },
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   handleDelete() {
@@ -200,6 +213,10 @@ export class TaskItem extends LitElement {
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    .complete {
+      color: #15803d;
     }
 
     .edit {

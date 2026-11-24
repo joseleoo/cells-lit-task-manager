@@ -48,6 +48,21 @@ public class InMemoryTaskService : ITaskService
         }
     }
 
+    public TaskModel? Complete(int id)
+    {
+        lock (_sync)
+        {
+            var task = _tasks.FirstOrDefault(x => x.Id == id);
+            if (task is null)
+            {
+                return null;
+            }
+
+            task.IsCompleted = true;
+            return Clone(task);
+        }
+    }
+
     public bool Delete(int id)
     {
         lock (_sync)

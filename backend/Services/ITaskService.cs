@@ -11,5 +11,7 @@ public interface ITaskService
 
     TaskModel? Update(int id, UpdateTaskDto dto);
 
+    TaskModel? Complete(int id);
+
     bool Delete(int id);
 }
