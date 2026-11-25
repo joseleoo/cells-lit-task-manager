@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Legacy Task Badge Demo</title>
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="./legacy-task-badge.html">
+    <link rel="stylesheet" href="./legacy-task-badge.css">
+    <style>
+      body {
+        margin: 0;
+        padding: 3rem 1.25rem;
+        background: #f9fafb;
+        color: #111827;
+        font-family: system-ui, sans-serif;
+      }
+
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+      }
+
+      p {
+        margin: 0 0 2rem;
+        color: #6b7280;
+      }
+
+      .demo-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Legacy Task Badge</h1>
+    <p>Polymer 2 component with a standalone demo page.</p>
+
+    <div class="demo-row">
+      <legacy-task-badge></legacy-task-badge>
+      <legacy-task-badge completed></legacy-task-badge>
+      <legacy-task-badge label="In review"></legacy-task-badge>
+    </div>
+  </body>
+</html>

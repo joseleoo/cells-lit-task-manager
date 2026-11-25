@@ -1,0 +1,16 @@
+<link rel="import" href="/node_modules/@polymer/polymer/polymer-element.html">
+<link rel="stylesheet" href="./legacy-task-badge.css">
+
+<dom-module id="legacy-task-badge">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+    </style>
+
+    <span class$="badge [[_statusClass(completed)]]">[[_label(completed, label)]]</span>
+  </template>
+
+  <script src="./legacy-task-badge.js"></script>
+</dom-module>

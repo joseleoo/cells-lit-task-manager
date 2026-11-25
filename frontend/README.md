@@ -33,11 +33,22 @@ Open `http://localhost:5173`. The API base URL defaults to `https://localhost:50
 
 To use a different API address, copy `.env.example` to `.env` and change `VITE_API_BASE_URL`.
 
+## Legacy Polymer 2 demo
+
+The standalone Polymer 2 component lives in `legacy/legacy-task-badge`. Start it with:
+
+```bash
+npm run dev:legacy
+```
+
+Polymer CLI serves the frontend root in npm mode and opens `/legacy/legacy-task-badge/`.
+
 Other commands:
 
 ```bash
 npm run build
 npm run preview
+npm run dev:legacy
 npm run test:e2e
 npm run test:e2e:ui
 ```
@@ -66,9 +77,16 @@ Unit tests with Vitest/Web Test Runner will be added in a later roadmap phase.
 
 ```text
 frontend/
+├── legacy/
+│   └── legacy-task-badge/
+│       ├── index.html
+│       ├── legacy-task-badge.css
+│       ├── legacy-task-badge.html
+│       └── legacy-task-badge.js
 ├── src/
 │   ├── components/
 │   │   ├── task-app.js
+│   │   ├── task-badge.js
 │   │   ├── task-item.js
 │   │   └── task-list.js
 │   ├── services/
